@@ -42,7 +42,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        image: eu.gcr.io/rm-tf-test/tests:0.24
+        image: eu.gcr.io/rm-tf-test/tests:0.25
         name: extip
         resources: {}
       - command:
@@ -56,7 +56,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
-        image: eu.gcr.io/rm-tf-test/tests:0.24
+        image: eu.gcr.io/rm-tf-test/tests:0.25
         name: intip
         resources: {}
       - command:
@@ -70,7 +70,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
-        image: eu.gcr.io/rm-tf-test/tests:0.24
+        image: eu.gcr.io/rm-tf-test/tests:0.25
         name: clusterconnect
         resources: {}
       - command:
@@ -80,7 +80,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        image: eu.gcr.io/rm-tf-test/tests:0.24
+        image: eu.gcr.io/rm-tf-test/tests:0.25
         name: curlint
         resources: {}
       - command:
@@ -90,7 +90,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        image: eu.gcr.io/rm-tf-test/tests:0.24
+        image: eu.gcr.io/rm-tf-test/tests:0.25
         name: inet
         resources: {}
       - image: nginx:stable-alpine
@@ -161,7 +161,7 @@ spec:
     spec:
       serviceAccountName: othertestpod
       containers:
-      - image: eu.gcr.io/rm-tf-test/tests:0.24
+      - image: eu.gcr.io/rm-tf-test/tests:0.25
         name: extip
         command: ["/scripts/curlsamens.sh"]
         resources: {}
