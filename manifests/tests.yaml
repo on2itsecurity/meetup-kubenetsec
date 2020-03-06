@@ -42,7 +42,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        image: eu.gcr.io/rm-tf-test/tests:0.23
+        image: eu.gcr.io/rm-tf-test/tests:0.24
         name: extip
         resources: {}
       - command:
@@ -56,7 +56,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
-        image: eu.gcr.io/rm-tf-test/tests:0.23
+        image: eu.gcr.io/rm-tf-test/tests:0.24
         name: intip
         resources: {}
       - command:
@@ -70,7 +70,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
-        image: eu.gcr.io/rm-tf-test/tests:0.23
+        image: eu.gcr.io/rm-tf-test/tests:0.24
         name: clusterconnect
         resources: {}
       - command:
@@ -80,7 +80,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        image: eu.gcr.io/rm-tf-test/tests:0.23
+        image: eu.gcr.io/rm-tf-test/tests:0.24
         name: curlint
         resources: {}
       - command:
@@ -90,12 +90,13 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        image: eu.gcr.io/rm-tf-test/tests:0.23
+        image: eu.gcr.io/rm-tf-test/tests:0.24
         name: inet
         resources: {}
       - image: nginx:stable-alpine
         name: nginx
       serviceAccountName: runtests
+---
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -103,6 +104,14 @@ metadata:
   name: othernamespace
 spec: {}
 status: {}
+---
+apiVersion: v1
+kind: ServiceAccount
+automountServiceAccountToken: false
+metadata:
+  creationTimestamp: null
+  name: othertestpod
+  namespace: othernamespace
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -129,6 +138,38 @@ spec:
         name: nginx
         resources: {}
 status: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: othertestpod
+  name: othertestpod
+  namespace: othernamespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: othertestpod
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: othertestpod
+    spec:
+      serviceAccountName: othertestpod
+      containers:
+      - image: eu.gcr.io/rm-tf-test/tests:0.24
+        name: extip
+        command: ["/scripts/curlsamens.sh"]
+        resources: {}
+        env:
+        - name: NODEIP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
 ---
 apiVersion: v1
 kind: Service
