@@ -1,0 +1,151 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: diagnostic
+spec: {}
+status: {}
+---
+apiVersion: v1
+automountServiceAccountToken: false
+kind: ServiceAccount
+metadata:
+  creationTimestamp: null
+  name: runtests
+  namespace: diagnostic
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: runtests
+  name: runtests
+  namespace: diagnostic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: runtests
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: runtests
+    spec:
+      containers:
+      - command:
+        - /scripts/extip.sh
+        env:
+        - name: NODEIP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        image: eu.gcr.io/rm-tf-test/tests:0.23
+        name: extip
+        resources: {}
+      - command:
+        - /scripts/intip.sh
+        env:
+        - name: NODEIP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: PODIP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        image: eu.gcr.io/rm-tf-test/tests:0.23
+        name: intip
+        resources: {}
+      - command:
+        - /scripts/clusterconnect.sh
+        env:
+        - name: NODEIP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: PODIP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        image: eu.gcr.io/rm-tf-test/tests:0.23
+        name: clusterconnect
+        resources: {}
+      - command:
+        - /scripts/curlint.sh
+        env:
+        - name: NODEIP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        image: eu.gcr.io/rm-tf-test/tests:0.23
+        name: curlint
+        resources: {}
+      - command:
+        - /scripts/inet.sh
+        env:
+        - name: NODEIP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        image: eu.gcr.io/rm-tf-test/tests:0.23
+        name: inet
+        resources: {}
+      - image: nginx:stable-alpine
+        name: nginx
+      serviceAccountName: runtests
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: othernamespace
+spec: {}
+status: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: otherpod
+  name: otherpod
+  namespace: othernamespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: otherpod
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: otherpod
+    spec:
+      containers:
+      - image: nginx:stable-alpine
+        name: nginx
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: otherpod
+  name: otherpod
+  namespace: othernamespace
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: otherpod
+  type: ClusterIP
+status:
+  loadBalancer: {}
