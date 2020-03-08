@@ -38,4 +38,4 @@ spec:
       - effect: NoExecute
         operator: Exists
       - key: "CriticalAddonsOnly"
-        operator: "Exists
+        operator: Exists
