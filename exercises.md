@@ -127,10 +127,6 @@ From this VM you can use ```kubectl``` to access the cluster.
   ```
   kubectl create -f https://raw.githubusercontent.com/on2itsecurity/meetup-kubenetsec/master/manifests/ip-masq-agent-original-ds.yaml
   ```
-* Restart the deamonset
-  ```
-  kubectl delete pod -n kube-system -l k8s-app=ip-masq-agent
-  ```
 * Repeat the same tests as in exercise 1, do you notice any difference ?
 * Why is outside traffic not allowed anymore ?
 * Why don't we want to allow pods to the Internet ?
@@ -158,6 +154,10 @@ From this VM you can use ```kubectl``` to access the cluster.
 * Create the deamonset
   ```
   kubectl apply -f https://raw.githubusercontent.com/on2itsecurity/meetup-kubenetsec/master/manifests/ip-masq-agent-ds.yaml
+  ```
+* Restart the deamonset
+  ```
+  kubectl delete pod -n kube-system -l k8s-app=ip-masq-agent
   ```
 * Generate an API Key to access the firewall, the result is displayed between the ```<result>``` tags.
   ```
