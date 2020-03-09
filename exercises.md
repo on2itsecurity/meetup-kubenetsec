@@ -112,7 +112,7 @@ From this VM you can use ```kubectl``` to access the cluster.
   ```
 * To overrule the default masquerade set by GKE, we need install the 'no-masq-daemonset'
 
-* Adjust the config file, which tells to NAT / Masquerade nothing, fill in the obtained public IP.
+* Adjust the config file, which tells to NAT / Masquerade nothing.
   ```
   cat <<EOF > config
   nonMasqueradeCIDRs:
