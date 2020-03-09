@@ -161,7 +161,7 @@ From this VM you can use ```kubectl``` to access the cluster.
   ```
 * Generate an API Key to access the firewall, the result is displayed between the ```<result>``` tags.
   ```
-  kubectl run getapikey --image=curlimages/curl --restart=Never --rm -ti -- curl -k -X POST 'https://192.168.203.2/api/?type=keygen&user=labadmin&password=P@ssw0rd!123'
+  kubectl run getapikey --image=curlimages/curl --restart=Never --rm -ti -- curl -k -X POST 'https://192.168.2xx.2/api/?type=keygen&user=labadmin&password=P@ssw0rd!123'
   ```
 * Create the env.ini file and fill in the IP address of the firewall and the API-key.
   ```
@@ -202,7 +202,7 @@ From this VM you can use ```kubectl``` to access the cluster.
 
 ## Exercise 5: Generate Intra- pod & cluster traffic
 
-* The runtests pod will connect to the otherpad in an other namespace.
+* The runtests pod will connect to the otherpod in an other namespace.
 * On the dashboard you should be able to see if this connection is succesful.
 * What kind of traffic is going from the testpod to the otherpod ?
   * How would you inspect this traffic ?
@@ -212,6 +212,10 @@ From this VM you can use ```kubectl``` to access the cluster.
 * Install Hubble
   ```
   kubectl apply -f https://raw.githubusercontent.com/cilium/hubble/master/tutorials/deploy-hubble-servicemap/hubble-all-minikube.yaml
+  ```
+* Install the Hubble service
+  ```
+  kubectl create -f https://raw.githubusercontent.com/on2itsecurity/meetup-kubenetsec/master/manifests/hubble-ui-service.yaml
   ```
 * Go to the public IP address you received for Hubble.
 * Are you able to see the traffic from the runtest pod ?
