@@ -10,7 +10,7 @@ status: {}
 #  --set global.nodeinit.enabled=true \
 #  --set nodeinit.reconfigureKubelet=true \
 #  --set nodeinit.removeCbrBridge=true \
-#  --set global.autoDirectNodeRoutes=true \
+#  --set global.autoDirectNodeRoutes=false \
 #  --set global.cni.binPath=/home/kubernetes/bin \
 #  --set global.restartPods=true
 ---
@@ -135,7 +135,7 @@ data:
   masquerade: "true"
   enable-xt-socket-fallback: "true"
   install-iptables-rules: "true"
-  auto-direct-node-routes: "true"
+  auto-direct-node-routes: "false"
   kube-proxy-replacement:  "probe"
   enable-host-reachable-services: "false"
   enable-external-ips: "false"
